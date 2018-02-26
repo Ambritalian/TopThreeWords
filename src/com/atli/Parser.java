@@ -1,11 +1,14 @@
 package com.atli;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Parser {
+
     private List<String> words = new ArrayList<>();
 
     public Parser(String filename) {

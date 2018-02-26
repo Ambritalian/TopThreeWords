@@ -1,6 +1,9 @@
 package com.atli;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Counter {
 
@@ -19,10 +22,10 @@ public class Counter {
             if (i < 3) topThree[i] = currentWord;
             else {
                 if (wordCounts.get(currentWord) >= wordCounts.get(topThree[0])) { // New top word
-                    if (currentWord.equals(topThree[1])) {
+                    if (currentWord.equals(topThree[1])) { // if top word already in list in second place, swap
                         topThree[1] = topThree[0];
                         topThree[0] = currentWord;
-                    } else if (!currentWord.equals(topThree[0])) {
+                    } else if (!currentWord.equals(topThree[0])) { // Else propagate through
                         String tmp = topThree[0];
                         topThree[0] = currentWord;
                         String tmp2 = topThree[1];
@@ -30,17 +33,13 @@ public class Counter {
                         topThree[2] = tmp2;
                     }
                 } else if (wordCounts.get(currentWord) >= wordCounts.get(topThree[1])) { // New 2nd top word
-                    if (!currentWord.equals(topThree[1])) {
+                    if (!currentWord.equals(topThree[1])) { // if 2nd word already in list, swap
                         topThree[2] = topThree[1];
                         topThree[1] = currentWord;
                     }
                 } else if (wordCounts.get(currentWord) >= wordCounts.get(topThree[2])) topThree[2] = currentWord; // New 3rd top word
             }
         }
-    }
-
-    public Map<String, Integer> getWordCounts() {
-        return wordCounts;
     }
 
     public List<String> getTopWords() {
