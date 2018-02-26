@@ -45,8 +45,12 @@ public class Counter {
     public List<String> getTopWords() {
         List<String> top3 = new ArrayList<>();
         for (int i = 0; i<3; i++) {
-            top3.add(topThree[i] + " " + wordCounts.get(topThree[i]));
+            top3.add(topThree[i] + " - " + wordCounts.get(topThree[i]));
         }
         return top3;
+    }
+
+    public Map<String, Integer> getWordCounts() {
+        return wordCounts;
     }
 }
