@@ -4,7 +4,7 @@ package com.atli;
  * @Name: Top Three Words
  * @Author: Alex Ingram
  * @Date: 26/02/2018
- * @Version: 1.0
+ * @Version: 1.1
 *****************************/
 
 public class Main {
