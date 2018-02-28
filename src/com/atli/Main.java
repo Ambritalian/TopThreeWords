@@ -9,7 +9,7 @@ package com.atli;
 
 public class Main {
     public static void main(String[] args) {
-        Controller.parse("aLargeFile");
+        Controller.parse("LargeFile");
     }
 }
 
