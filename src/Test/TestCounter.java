@@ -5,85 +5,80 @@ import com.atli.Parser;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class TestCounter {
 
-    List<String> words;
-    Map<String, Integer> map;
+    Counter counter;
+    Counter counter2;
 
     @Before
     public void setup() {
-        Parser p = new Parser("LargeFile");
-        words = p.getWords();
+        counter = new Counter();
+        counter2 = new Counter();
+        for (int i = 0; i<5; i++) counter.add("and");
+        for (int i = 0; i<1; i++) counter.add("of");
+        for (int i = 0; i<3; i++) counter.add("there");
+        for (int i = 0; i<2; i++) counter.add("was");
+        for (int i = 0; i<4; i++) counter.add("some");
+        for (int i = 0; i<6; i++) counter.add("how");
+
+        for (int i = 0; i<5; i++) counter2.add("and");
+        for (int i = 0; i<1; i++) counter2.add("of");
+        for (int i = 0; i<3; i++) counter2.add("there");
+        for (int i = 0; i<2; i++) counter2.add("was");
+        for (int i = 0; i<4; i++) counter2.add("some");
+        for (int i = 0; i<6; i++) counter2.add("how");
+
     }
 
     @Test
-    public void testGoodInput() {
-        assertTrue(words.size() != 0);
+    public void testTopWords() {
+        List<String> words = counter.getTopWords();
+        assertEquals(3,words.size());
+        assertFalse(words.size() == 0);
+        for (String word : words) {
+            Pattern p = Pattern.compile("[a-z- 0-9]+");
+            Matcher m = p.matcher(word);
+            assertTrue(m.matches());
+            System.out.println(word);
+        }
+        assertTrue(words.get(0).equals("how - 6"));
+        assertTrue(words.get(1).equals("and - 5"));
+        assertTrue(words.get(2).equals("some - 4"));
+    }
+
+
+    @Test
+    public void testConsistency() {
+
+        List<String> threeWords = counter.getTopWords();
+        List<String> threeWords2 = counter.getTopWords();
+        for (int i = 0; i < 3; i++) {
+            assertEquals(threeWords.get(i),threeWords2.get(i));
+        }
     }
 
     @Test
     public void testConversion() {
         int sum = 0;
-        Counter c = new Counter(words);
-        map = c.getWordCounts();
+        Map<String, Integer> map = counter.getWordCounts();
+        assertTrue(map.size() == 6);
         Iterator it = map.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             sum = sum + (int) pair.getValue();
             it.remove(); // avoids a ConcurrentModificationException
         }
-        assertTrue(words.size() == sum);
-    }
-
-    @Test
-    public void testTopWordsEmpty() {
-        Parser p = new Parser("empty");
-        words = p.getWords();
-        Counter c = new Counter(words);
-        List<String> threeWords = c.getTopWords();
-        assertEquals(3,threeWords.size());
-        for (String thing: threeWords) {
-            System.out.println(thing);
-        }
-    }
-
-    @Test
-    public void testTopWordsSmall() {
-        Parser p = new Parser("threeWordsTest");
-        words = p.getWords();
-        Counter c = new Counter(words);
-        List<String> threeWords = c.getTopWords();
-        assertEquals(3,threeWords.size());
-        for (String thing: threeWords) {
-            System.out.println(thing);
-        }
-    }
-
-    @Test
-    public void testTopWordsLarge() {
-        Counter c = new Counter(words);
-        List<String> threeWords = c.getTopWords();
-        assertEquals(3,threeWords.size());
-        for (String thing: threeWords) {
-            System.out.println(thing);
-        }
-    }
-
-    @Test
-    public void testConsistency() {
-        Counter c = new Counter(words);
-        Counter c1 = new Counter(words);
-        List<String> threeWords = c.getTopWords();
-        List<String> threeWords2 = c.getTopWords();
-        for (int i = 0; i < 3; i++) {
-            assertEquals(threeWords.get(i),threeWords2.get(i));
-        }
+        assertTrue(sum == 21);
     }
 }
